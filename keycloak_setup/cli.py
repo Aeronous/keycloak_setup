@@ -16,9 +16,9 @@ def cli():
     pass
 
 
-@cli.command(name="everything")
+@cli.command(name="configure")
 @click.option('--config', required=True, help='Path to configuration YAML file.')
-def everything(config):
+def configure(config):
     """Run full setup: realm, groups, users, clients, mappers"""
     try:
         # Load config
@@ -147,3 +147,18 @@ def add_group(name, parent, config):
 
     except Exception as e:
         logger.error(f"❌ Failed to create group(s): {e}")
+
+
+@cli.command(name="install")
+@click.option("--method", "-m", type=click.Choice(["docker", "helm"]), required=True, help="Installation method")
+def install(method):
+    """
+    Install Keycloak using docker-compose or Helm.
+    """
+    from keycloak_setup.installer import Installer
+
+    try:
+        installer = Installer()
+        installer.install(method)
+    except Exception as e:
+        logger.error(f"❌ Installation failed: {e}")
