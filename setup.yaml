@@ -1,0 +1,44 @@
+
+server_url: http://localhost:8080
+realm: auth-system
+admin_user: admin
+admin_password: admin
+
+groups:
+  - name: tech_group
+    subgroups:
+      - name: operational__viewer
+      - name: operational__admin
+  - name: dev_group
+
+users:
+  - username: daniel
+    email: daniel@example.com
+    password: 123456
+    firstName: Daniel
+    lastName: Pahima
+    group: tech_group
+  - username: alice
+    email: alice@example.com
+    password: 123456
+    group: dev_group
+  - username: test
+    group: dev_group
+    password: 123456
+
+clients:
+  - client_id: fe-app
+    publicClient: true
+    redirect_uris:
+      - "http://localhost:3000/*"
+    web_origins:
+      - "http://localhost:3000"
+
+  - client_id: back-app
+    secret: "my-secret"
+    publicClient: false
+    serviceAccountsEnabled: true
+    redirect_uris:
+      - "http://localhost:5000/callback"
+    web_origins:
+      - "http://localhost:5000"

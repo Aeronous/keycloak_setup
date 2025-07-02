@@ -1,0 +1,9 @@
+[project]
+name = "keycloak-setup"
+version = "0.1.0"
+description = "Keycloak setup automation tool"
+authors = [{name = "Your Name"}]
+dependencies = ["click", "pyyaml", "requests"]
+
+[project.scripts]
+keycloak_setup = "keycloak_setup.cli:cli"
