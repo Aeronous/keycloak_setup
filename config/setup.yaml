@@ -4,39 +4,103 @@ admin_user: admin
 admin_password: admin
 
 groups:
-  - name: tech_group
+  - name: viewer
     subgroups:
       - name: operational__viewer
-      - name: operational__admin
-  - name: dev_group
+      - name: technical__viewer
+      - name: debrifing__viewer
+      - name: instructor__viewer
+      - name: training__viewer
+  - name: operator
+    subgroups:
+      - name: operational__operator
+      - name: technical__operator
+      - name: debrifing__operator
+      - name: instructor__operator
+      - name: training__operator
+  - name: technician
+    subgroups:
+      - name: operational__technician
+      - name: technical__technician
+      - name: debrifing__technician
+      - name: instructor__technician
+      - name: training__technician
+  - name: instructor
+    subgroups:
+      - name: operational__instructor
+      - name: technical__instructor
+      - name: debrifing__instructor
+      - name: instructor__instructor
+      - name: training__instructor
+  - name: administrator
+    subgroups:
+      - name: operational__administrator
+      - name: technical__administrator
+      - name: debrifing__administrator
+      - name: instructor__administrator
+      - name: training__administrator
+  - name: superusers
+    subgroups:
+      - name: administrator
+      - name: instructor
+      - name: technician
+      - name: operator
+      - name: viewer
+
 
 users:
-  - username: daniel
-    email: daniel@example.com
+  - username: superuser
+    email: superuser@aeronous.com
     password: 123456
-    firstName: Daniel
-    lastName: Pahima
-    group: tech_group
-  - username: alice
-    email: alice@example.com
+    firstName: superuser
+    lastName: superuser
+    group: superusers
+  - username: viewer_user
+    email: vieweruser@aeronous.com
     password: 123456
-    group: dev_group
-  - username: test
-    group: dev_group
+    firstName: viewer
+    lastName: viewer
+    group: viewer
+  - username: operator_user
+    email: operatoruser@aeronous.com
     password: 123456
+    firstName: operator
+    lastName: operator
+    group: operator
+  - username: technician_user
+    email: technicianuser@aeronous.com
+    password: 123456
+    firstName: technician
+    lastName: technician
+    group: technician
+  - username: instructor_user
+    email: instructoruser@aeronous.com
+    password: 123456
+    firstName: instructor
+    lastName: instructor
+    group: instructor
+  - username: administrator_user
+    email: administratoruser@aeronous.com
+    password: 123456
+    firstName: administrator
+    lastName: administrator
+    group: administrator
 
 clients:
-  - client_id: fe-app
-    publicClient: true
+  - client_id: fe-c4i
+    publicClient: false
+    secret: true
+    serviceAccountsEnabled: true
     redirect_uris:
       - "http://localhost:3000/*"
     web_origins:
       - "http://localhost:3000"
 
-  - client_id: back-app
+  - client_id: be-c4i
     publicClient: false
+    secret: true
     serviceAccountsEnabled: true
     redirect_uris:
-      - "http://localhost:5000/callback"
+      - "http://localhost:3000/*"
     web_origins:
-      - "http://localhost:5000"
+      - "http://localhost:3000"

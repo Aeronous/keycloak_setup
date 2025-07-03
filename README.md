@@ -51,14 +51,15 @@ python main.py <command> [options]
 
 ### 🔧 Available Commands
 
-| Command | Description |
-| ------- | ----------- |
- | configure | Run full setup from a YAML configuration|
-| add-user | Add a single user with group assignment|
- | add-group | Create root or nested groups |
- | assign-user | Assign an existing user to an existing group |
+| Command | Description                                           |
+| ------- |-------------------------------------------------------|
+ | configure | Run full setup from a YAML configuration              |
+| add-user | Add a single user with group assignment               |
+ | add-group | Create root or nested groups                          |
+ | assign-user | Assign an existing user to an existing group          |
  | install | Install Keycloak using Docker (or Helm in the future) |
- | get-client-secret | Print the client secret |  
+ | uninstall | Will erase all data stored in Keycloak and PostgreSQL |
+ | get-client-secret | Print the client secret                               |  
 
 ### 🧪 Examples
 
@@ -99,6 +100,11 @@ python main.py get-client-secret --client-id <your-client-id> --config config/se
 python main.py install --method docker
 ```
 
+#### 🧹 Uninstall Keycloak
+
+```bash
+python3 main.py uninstall --method docker
+```
 ---
 
 ## 🧾 Configuration File (YAML)
