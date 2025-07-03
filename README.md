@@ -58,6 +58,7 @@ python main.py <command> [options]
  | add-group | Create root or nested groups |
  | assign-user | Assign an existing user to an existing group |
  | install | Install Keycloak using Docker (or Helm in the future) |
+ | get-client-secret | Print the client secret |  
 
 ### 🧪 Examples
 
@@ -85,6 +86,12 @@ python main.py add-group --name frontend,backend --parent tech_group --config co
 
 ```bash
 python main.py assign-user --username daniel --group backend --config config/setup.yaml
+```
+
+#### 🔐 Get a Client Secret
+
+```bash
+python main.py get-client-secret --client-id <your-client-id> --config config/setup.yaml
 ```
 
 #### 🐳 Start Keycloak with Docker
