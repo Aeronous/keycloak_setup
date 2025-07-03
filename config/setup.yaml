@@ -1,4 +1,3 @@
-
 server_url: http://localhost:8080
 realm: auth-system
 admin_user: admin
@@ -35,7 +34,6 @@ clients:
       - "http://localhost:3000"
 
   - client_id: back-app
-    secret: "my-secret"
     publicClient: false
     serviceAccountsEnabled: true
     redirect_uris:

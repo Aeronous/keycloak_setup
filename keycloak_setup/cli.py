@@ -7,6 +7,7 @@ from keycloak_setup.groups import GroupManager
 from keycloak_setup.users import UserManager
 from keycloak_setup.clients import ClientManager
 from keycloak_setup.mappers import MapperManager
+from keycloak_setup.installer import Installer
 
 logger = get_logger()
 
@@ -16,9 +17,9 @@ def cli():
     pass
 
 
-@cli.command(name="everything")
+@cli.command(name="configure")
 @click.option('--config', required=True, help='Path to configuration YAML file.')
-def everything(config):
+def configure(config):
     """Run full setup: realm, groups, users, clients, mappers"""
     try:
         # Load config
@@ -147,3 +148,40 @@ def add_group(name, parent, config):
 
     except Exception as e:
         logger.error(f"❌ Failed to create group(s): {e}")
+
+
+@cli.command(name="install")
+@click.option("--method", "-m", type=click.Choice(["docker", "helm"]), required=True, help="Installation method")
+def install(method):
+    """
+    Install Keycloak using docker-compose or Helm.
+    """
+
+    try:
+        installer = Installer()
+        installer.install(method)
+    except Exception as e:
+        logger.error(f"❌ Installation failed: {e}")
+
+
+@cli.command("get-client-secret")
+@click.option("--client-id", "-c", required=True, help="Client ID to fetch the secret for.")
+@click.option("--config", "-f", required=True, help="Path to the YAML configuration file.")
+def get_client_secret(client_id, config):
+    """
+    Fetch and display the confidential client secret.
+    """
+    try:
+        cfg = ConfigLoader.load_config(config)
+        server_url = cfg["server_url"]
+        realm = cfg["realm"]
+        admin_user = cfg["admin_user"]
+        admin_password = cfg["admin_password"]
+
+        token = KeycloakAuth(server_url, admin_user, admin_password, realm="master").get_admin_token()
+        clients = ClientManager(server_url, token, realm)
+
+        secret = clients.get_client_secret(client_id)
+        click.echo(f"🔐 Secret for client '{client_id}': {secret}")
+    except Exception as e:
+        click.echo(f"❌ Failed to retrieve secret: {e}")
