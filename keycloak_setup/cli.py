@@ -60,6 +60,7 @@ def configure(config):
         logger.info("🎉 Keycloak setup completed successfully.")
     except Exception as e:
         logger.error(f"Setup failed: {e}")
+        click.echo(f"Setup failed: {e}", err=True)
 
 
 @cli.command(name="add-user")
@@ -99,6 +100,7 @@ def add_user(config, username, password, group, email, first_name, last_name):
         logger.info("🎉 User added successfully.")
     except Exception as e:
         logger.error(f"❌ Failed to add user: {e}")
+        click.echo(f"❌ Failed to add user: {e}", err=True)
 
 
 @cli.command(name="assign-user")
@@ -121,6 +123,7 @@ def assign_user_group(config, username, group):
         logger.info("✅ User assigned to group successfully.")
     except Exception as e:
         logger.error(f"❌ Failed to assign user to group: {e}")
+        click.echo(f"❌ Failed to assign user to group: {e}", err=True)
 
 
 @cli.command(name="add-group")
@@ -149,6 +152,7 @@ def add_group(name, parent, config):
 
     except Exception as e:
         logger.error(f"❌ Failed to create group(s): {e}")
+        click.echo(f"❌ Failed to create group(s): {e}", err=True)
 
 
 @cli.command("get-client-secret")
@@ -171,7 +175,8 @@ def get_client_secret(client_id, config):
         secret = clients.get_client_secret(client_id)
         click.echo(f"🔐 Secret for client '{client_id}': {secret}")
     except Exception as e:
-        click.echo(f"❌ Failed to retrieve secret: {e}")
+        logger.error(f"❌ Failed to retrieve secret: {e}")
+        click.echo(f"❌ Failed to retrieve secret: {e}", err=True)
 
 
 @cli.command(name="install")
@@ -186,6 +191,7 @@ def install(method):
         installer.install(method)
     except Exception as e:
         logger.error(f"❌ Installation failed: {e}")
+        click.echo(f"❌ Installation failed: {e}", err=True)
 
 
 @cli.command(name="uninstall")
@@ -199,3 +205,4 @@ def uninstall(method):
         uninstaller.uninstall(method)
     except Exception as e:
         logger.error(f"❌ Uninstallation failed: {e}")
+        click.echo(f"❌ Uninstallation failed: {e}", err=True)
