@@ -8,6 +8,7 @@ from keycloak_setup.users import UserManager
 from keycloak_setup.clients import ClientManager
 from keycloak_setup.mappers import MapperManager
 from keycloak_setup.installer import Installer
+from keycloak_setup.uninstaller import Uninstaller
 
 logger = get_logger()
 
@@ -150,20 +151,6 @@ def add_group(name, parent, config):
         logger.error(f"❌ Failed to create group(s): {e}")
 
 
-@cli.command(name="install")
-@click.option("--method", "-m", type=click.Choice(["docker", "helm"]), required=True, help="Installation method")
-def install(method):
-    """
-    Install Keycloak using docker-compose or Helm.
-    """
-
-    try:
-        installer = Installer()
-        installer.install(method)
-    except Exception as e:
-        logger.error(f"❌ Installation failed: {e}")
-
-
 @cli.command("get-client-secret")
 @click.option("--client-id", "-c", required=True, help="Client ID to fetch the secret for.")
 @click.option("--config", "-f", required=True, help="Path to the YAML configuration file.")
@@ -185,3 +172,30 @@ def get_client_secret(client_id, config):
         click.echo(f"🔐 Secret for client '{client_id}': {secret}")
     except Exception as e:
         click.echo(f"❌ Failed to retrieve secret: {e}")
+
+
+@cli.command(name="install")
+@click.option("--method", "-m", type=click.Choice(["docker", "helm"]), required=True, help="Installation method")
+def install(method):
+    """
+    Install Keycloak using docker-compose or Helm.
+    """
+
+    try:
+        installer = Installer()
+        installer.install(method)
+    except Exception as e:
+        logger.error(f"❌ Installation failed: {e}")
+
+
+@cli.command(name="uninstall")
+@click.option("--method", "-m", type=click.Choice(["docker", "helm"]), required=True, help="Uninstallation method")
+def uninstall(method):
+    """
+    Uninstall Keycloak using docker-compose or Helm.
+    """
+    try:
+        uninstaller = Uninstaller()
+        uninstaller.uninstall(method)
+    except Exception as e:
+        logger.error(f"❌ Uninstallation failed: {e}")
