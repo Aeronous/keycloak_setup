@@ -55,6 +55,9 @@ users:
     firstName: superuser
     lastName: superuser
     group: superusers
+    client_roles:
+      realm-management:
+        - realm-admin
   - username: viewer__user
     email: vieweruser@aeronous.com
     password: 123456
