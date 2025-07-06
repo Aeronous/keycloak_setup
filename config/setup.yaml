@@ -100,7 +100,7 @@ clients:
 
   - client_id: fe-login
     publicClient: false
-    secret: true
+    secret: false
     serviceAccountsEnabled: true
     redirect_uris:
       - "http://localhost:4200/*"

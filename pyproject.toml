@@ -1,9 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "keycloak-setup"
 version = "0.1.0"
 description = "Keycloak setup automation tool"
-authors = [{name = "Your Name"}]
+authors = [{name = "Daniel Pahima"}]
 dependencies = ["click", "pyyaml", "requests"]
 
 [project.scripts]
 keycloak_setup = "keycloak_setup.cli:cli"
+
+[tool.setuptools.packages.find]
+include = ["keycloak_setup*"]
+
+[tool.setuptools.package-data]
+keycloak_setup = ["*.yaml", "*.yml"]
