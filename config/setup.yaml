@@ -47,7 +47,6 @@ groups:
       - name: operator
       - name: viewer
 
-
 users:
   - username: superuser
     email: superuser@aeronous.com
@@ -90,16 +89,6 @@ users:
     group: administrator
 
 clients:
-
-  - client_id: fe-c4i
-    publicClient: false
-    secret: true
-    serviceAccountsEnabled: true
-    redirect_uris:
-      - "http://localhost:3000/*"
-    web_origins:
-      - "http://localhost:3000"
-
   - client_id: be-c4i
     publicClient: false
     secret: true
@@ -114,6 +103,6 @@ clients:
     secret: true
     serviceAccountsEnabled: true
     redirect_uris:
-      - "http://localhost:3000/*"
+      - "http://localhost:4200/*"
     web_origins:
-      - "http://localhost:3000"
+      - "http://localhost:4200"
