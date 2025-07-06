@@ -27,7 +27,7 @@ class UserManager:
 
     def get_group_id_by_name(self, name: str) -> str:
         url = f"{self.server_url}/admin/realms/{self.realm}/groups"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         if response.status_code != 200:
             return None
         for group in response.json():
@@ -67,7 +67,7 @@ class UserManager:
         }
 
         url = f"{self.server_url}/admin/realms/{self.realm}/users"
-        response = requests.post(url, json=user_payload, headers=self.headers)
+        response = requests.post(url, json=user_payload, headers=self.headers, verify=False)
 
         if response.status_code == 201:
             logger.info(f"✅ User '{username}' created.")
@@ -84,7 +84,7 @@ class UserManager:
 
         # Step 3: Assign to group
         assign_url = f"{self.server_url}/admin/realms/{self.realm}/users/{user_id}/groups/{group_id}"
-        assign_response = requests.put(assign_url, headers=self.headers)
+        assign_response = requests.put(assign_url, headers=self.headers, verify=False)
 
         if assign_response.status_code in [204, 201]:
             logger.info(f"✅ User '{username}' assigned to group '{group_name}'.")
@@ -99,7 +99,7 @@ class UserManager:
 
     def get_user_id_by_username(self, username: str) -> str:
         url = f"{self.server_url}/admin/realms/{self.realm}/users?username={username}"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         if response.status_code != 200:
             return None
         users = response.json()
@@ -131,7 +131,7 @@ class UserManager:
             raise Exception(f"Group '{group_name}' not found.")
 
         url = f"{self.server_url}/admin/realms/{self.realm}/users/{user_id}/groups/{group_id}"
-        response = requests.put(url, headers=self.headers)
+        response = requests.put(url, headers=self.headers, verify=False)
 
         if response.status_code in [204, 201]:
             logger.info(f"✅ User '{username}' assigned to group '{group_name}'.")
@@ -151,7 +151,7 @@ class UserManager:
         """
         # Step 1: Find client internal ID
         url = f"{self.server_url}/admin/realms/{self.realm}/clients"
-        response = requests.get(url, headers=self.headers, params={"clientId": client_id_str})
+        response = requests.get(url, headers=self.headers, params={"clientId": client_id_str}, verify=False)
         if response.status_code != 200:
             raise Exception(f"Failed to find client '{client_id_str}'")
         clients = response.json()
@@ -161,7 +161,7 @@ class UserManager:
 
         # Step 2: Get all roles in that client
         roles_url = f"{self.server_url}/admin/realms/{self.realm}/clients/{client_uuid}/roles"
-        roles_response = requests.get(roles_url, headers=self.headers)
+        roles_response = requests.get(roles_url, headers=self.headers, verify=False)
         if roles_response.status_code != 200:
             raise Exception(f"Failed to fetch roles for client '{client_id_str}'")
         available_roles = roles_response.json()
@@ -173,7 +173,7 @@ class UserManager:
 
         # Step 4: Assign to user
         assign_url = f"{self.server_url}/admin/realms/{self.realm}/users/{user_id}/role-mappings/clients/{client_uuid}"
-        assign_resp = requests.post(assign_url, headers=self.headers, json=role_objects)
+        assign_resp = requests.post(assign_url, headers=self.headers, json=role_objects, verify=False)
         if assign_resp.status_code not in [204, 200]:
             raise Exception(f"Failed to assign client roles: {assign_resp.text}")
         logger.info(f"✅ Assigned client roles {role_names} to user '{user_id}' for client '{client_id_str}'.")

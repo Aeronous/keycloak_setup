@@ -27,7 +27,7 @@ class GroupManager:
 
     def get_group_id_by_name(self, parent_id: str, name: str) -> str:
         url = f"{self.server_url}/admin/realms/{self.realm}/groups/{parent_id}/children"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         if response.status_code != 200:
             return None
         for group in response.json():
@@ -37,7 +37,7 @@ class GroupManager:
 
     def find_root_group_id(self, name: str) -> str:
         url = f"{self.server_url}/admin/realms/{self.realm}/groups"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         if response.status_code != 200:
             return None
         for group in response.json():
@@ -52,7 +52,7 @@ class GroupManager:
             url = f"{self.server_url}/admin/realms/{self.realm}/groups"
 
         payload = {"name": name}
-        response = requests.post(url, json=payload, headers=self.headers)
+        response = requests.post(url, json=payload, headers=self.headers, verify=False)
 
         if response.status_code in [201, 204]:
             logger.info(f"✅ Group '{name}' created successfully.")

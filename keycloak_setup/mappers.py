@@ -27,7 +27,7 @@ class MapperManager:
 
     def get_client_uuid(self, client_id: str) -> str:
         url = f"{self.server_url}/admin/realms/{self.realm}/clients?clientId={client_id}"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         if response.status_code == 200 and response.json():
             return response.json()[0]["id"]
         return None
@@ -52,7 +52,7 @@ class MapperManager:
             }
         }
 
-        response = requests.post(url, json=payload, headers=self.headers)
+        response = requests.post(url, json=payload, headers=self.headers, verify=False)
         if response.status_code in [201, 204]:
             logger.info(f"✅ Group membership mapper added to client '{client_id}'.")
         elif response.status_code == 409:

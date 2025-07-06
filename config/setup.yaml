@@ -1,7 +1,7 @@
-server_url: http://localhost:8080
+server_url: https://keycloak.local.dev
 realm: auth-system
 admin_user: admin
-admin_password: admin
+admin_password: admin123
 
 groups:
   - name: viewer

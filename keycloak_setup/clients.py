@@ -27,7 +27,7 @@ class ClientManager:
 
     def client_exists(self, client_id: str) -> bool:
         url = f"{self.server_url}/admin/realms/{self.realm}/clients?clientId={client_id}"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         return bool(response.ok and response.json())
 
     def create_client(self, client: dict):
@@ -56,7 +56,7 @@ class ClientManager:
         }
 
         url = f"{self.server_url}/admin/realms/{self.realm}/clients"
-        response = requests.post(url, json=payload, headers=self.headers)
+        response = requests.post(url, json=payload, headers=self.headers, verify=False)
 
         if response.status_code in [201, 204]:
             logger.info(f"✅ Client '{client_id}' created successfully.")
@@ -75,13 +75,13 @@ class ClientManager:
 
     def get_client_secret(self, client_id: str) -> str:
         url = f"{self.server_url}/admin/realms/{self.realm}/clients?clientId={client_id}"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         if not response.ok or not response.json():
             raise Exception(f"❌ Client '{client_id}' not found.")
 
         internal_id = response.json()[0]["id"]
         secret_url = f"{self.server_url}/admin/realms/{self.realm}/clients/{internal_id}/client-secret"
-        secret_response = requests.get(secret_url, headers=self.headers)
+        secret_response = requests.get(secret_url, headers=self.headers, verify=False)
         if secret_response.ok:
             return secret_response.json().get("value")
         else:

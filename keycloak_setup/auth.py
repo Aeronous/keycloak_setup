@@ -29,7 +29,7 @@ class KeycloakAuth:
             "password": self.admin_password,
         }
         try:
-            response = requests.post(self.token_url, data=data)
+            response = requests.post(self.token_url, data=data, verify=False)
             response.raise_for_status()
             token = response.json().get("access_token")
             if not token:

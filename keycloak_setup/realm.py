@@ -25,7 +25,7 @@ class RealmManager:
 
     def realm_exists(self, realm_name: str) -> bool:
         url = f"{self.server_url}/admin/realms/{realm_name}"
-        response = requests.get(url, headers=self.headers)
+        response = requests.get(url, headers=self.headers, verify=False)
         return response.status_code == 200
 
     def create_realm(self, realm_name: str):
@@ -38,7 +38,7 @@ class RealmManager:
             "realm": realm_name,
             "enabled": True
         }
-        response = requests.post(url, json=payload, headers=self.headers)
+        response = requests.post(url, json=payload, headers=self.headers, verify=False)
 
         if response.status_code in [201, 204]:
             logger.info(f"✅ Realm '{realm_name}' created successfully.")
