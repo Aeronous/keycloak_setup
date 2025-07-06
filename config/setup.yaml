@@ -91,15 +91,6 @@ users:
 
 clients:
 
-  - client_id: fe-c4i
-    publicClient: false
-    secret: true
-    serviceAccountsEnabled: true
-    redirect_uris:
-      - "http://localhost:3000/*"
-    web_origins:
-      - "http://localhost:3000"
-
   - client_id: be-c4i
     publicClient: false
     secret: true
@@ -111,9 +102,9 @@ clients:
 
   - client_id: fe-login
     publicClient: false
-    secret: true
+    secret: false
     serviceAccountsEnabled: true
     redirect_uris:
-      - "http://localhost:3000/*"
+      - "http://localhost:4200/*"
     web_origins:
-      - "http://localhost:3000"
+      - "http://localhost:4200"
