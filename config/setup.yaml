@@ -9,35 +9,24 @@ groups:
       - name: operational__viewer
       - name: technical__viewer
       - name: debrifing__viewer
-      - name: instructor__viewer
-      - name: training__viewer
   - name: operator
     subgroups:
       - name: operational__operator
       - name: technical__operator
       - name: debrifing__operator
-      - name: instructor__operator
       - name: training__operator
   - name: technician
     subgroups:
-      - name: operational__technician
       - name: technical__technician
-      - name: debrifing__technician
-      - name: instructor__technician
-      - name: training__technician
   - name: instructor
     subgroups:
-      - name: operational__instructor
-      - name: technical__instructor
-      - name: debrifing__instructor
-      - name: instructor__instructor
-      - name: training__instructor
+      - name: training_plan__instructor
   - name: administrator
     subgroups:
       - name: operational__administrator
       - name: technical__administrator
       - name: debrifing__administrator
-      - name: instructor__administrator
+      - name: training_plan__administrator
       - name: training__administrator
   - name: superusers
     subgroups:
@@ -46,7 +35,7 @@ groups:
       - name: technician
       - name: operator
       - name: viewer
-
+      
 users:
   - username: superuser
     email: superuser@aeronous.com
