@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  background: #000000;
+  color: #ffffff;
+  display: flex;
+  min-height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  width: 100%;
+}
+
+.left-panel,
+.right-panel {
+  flex: 1;
+  height: 100vh;
+}
+
+.left-panel {
+  background: url("../img/left-panel-bg.png") center center no-repeat;
+  background-size: cover;
+  filter: brightness(0.6);
+}
+
+.right-panel {
+  background: radial-gradient(circle at bottom, #222 0%, #000 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+}
+
+.logo {
+  width: 180px;
+  margin-bottom: 40px;
+}
+
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.step-indicator div {
+  font-size: 14px;
+  color: #777;
+  margin: 0 10px;
+  position: relative;
+}
+
+.step-indicator .active {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.step-indicator .active::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #9fff00;
+  border-radius: 50%;
+  margin: 0 auto 5px;
+}
+
+.form-field {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-field label {
+  display: block;
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 10px;
+  background-color: #111;
+  border: 1px solid #444;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  background-color: #3763ff;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #2c4fd1;
+}
+
+.message {
+  margin-top: 20px;
+  color: #f44336;
+}
