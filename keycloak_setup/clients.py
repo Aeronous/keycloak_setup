@@ -43,7 +43,15 @@ class ClientManager:
             logger.info(f"ℹ️ Client '{client_id}' already exists.")
             return
 
-        is_public = not bool(secret)
+        if secret is True:
+            is_public = False
+            custom_secret = None
+        elif isinstance(secret, str):
+            is_public = False
+            custom_secret = secret
+        else:
+            is_public = True
+            custom_secret = None
 
         payload = {
             "clientId": client_id,
@@ -55,16 +63,21 @@ class ClientManager:
             "serviceAccountsEnabled": not is_public,
         }
 
+        if custom_secret is not None:
+            payload["secret"] = custom_secret
+
         url = f"{self.server_url}/admin/realms/{self.realm}/clients"
         response = requests.post(url, json=payload, headers=self.headers, verify=False)
 
         if response.status_code in [201, 204]:
             logger.info(f"✅ Client '{client_id}' created successfully.")
             if not is_public:
-                secret_value = self.get_client_secret(client_id)
-                if secret_value:
-                    logger.info(
-                        f"🔒 Secret for client '{client_id}' created (not printed). Use `get-client-secret` to view.")
+                internal_id = self.get_client_internal_id(client_id)
+                if custom_secret is True:
+                    secret_value = self.get_client_secret(internal_id, client_id)
+                    if secret_value:
+                        logger.info(
+                            f"🔒 Secret for client '{client_id}' created (not printed). Use `get-client-secret` to view.")
         else:
             logger.error(f"❌ Failed to create client '{client_id}': {response.text}")
             raise Exception(f"Failed to create client '{client_id}'")
@@ -73,17 +86,18 @@ class ClientManager:
         for client in clients_config:
             self.create_client(client)
 
-    def get_client_secret(self, client_id: str) -> str:
-        url = f"{self.server_url}/admin/realms/{self.realm}/clients?clientId={client_id}"
-        response = requests.get(url, headers=self.headers, verify=False)
-        if not response.ok or not response.json():
-            raise Exception(f"❌ Client '{client_id}' not found.")
-
-        internal_id = response.json()[0]["id"]
+    def get_client_secret(self, internal_id: str, client_id: str) -> str:
         secret_url = f"{self.server_url}/admin/realms/{self.realm}/clients/{internal_id}/client-secret"
         secret_response = requests.get(secret_url, headers=self.headers, verify=False)
         if secret_response.ok:
             return secret_response.json().get("value")
         else:
             raise Exception(f"❌ Failed to retrieve secret for client '{client_id}'.")
+    def get_client_internal_id(self, client_id: str):
+        url = f"{self.server_url}/admin/realms/{self.realm}/clients?clientId={client_id}"
+        response = requests.get(url, headers=self.headers, verify=False)
+        if not response.ok or not response.json():
+            raise Exception(f"❌ Client '{client_id}' not found.")
+
+        return response.json()[0]["id"]
 

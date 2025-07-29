@@ -43,7 +43,7 @@ def test_get_client_secret_success(mock_get, client_manager):
         MagicMock(ok=True, json=MagicMock(return_value=[{"id": "abc"}])),
         MagicMock(ok=True, json=MagicMock(return_value={"value": "secret!"}))
     ]
-    secret = client_manager.get_client_secret('client1')
+    secret = client_manager.get_client_secret(client_manager.get_client_internal_id('client1'), 'client1')
     assert secret == "secret!"
 
 @patch('keycloak_setup.clients.requests.get')
