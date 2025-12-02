@@ -5,7 +5,7 @@ logger = get_logger()
 
 class UserProfileManager:
     """
-    Manage the Keycloak User Profile configuration (attributes).
+    Manage Keycloak user profile attributes (KC 25–26 compatible).
     """
 
     def __init__(self, server_url: str, token: str, realm: str):
@@ -21,48 +21,49 @@ class UserProfileManager:
         return f"{self.server_url}/admin/realms/{self.realm}/users/profile"
 
     def get_profile(self) -> dict:
-        """Retrieve User Profile configuration."""
         response = requests.get(self._url(), headers=self.headers, verify=False)
         if response.status_code != 200:
-            logger.error(f"❌ Failed to fetch user profile config: {response.text}")
-            raise Exception("Failed to load user profile")
+            raise Exception(f"Failed to fetch user profile: {response.text}")
         return response.json()
 
     def save_profile(self, profile: dict):
-        """Save entire User Profile JSON."""
         response = requests.put(self._url(), headers=self.headers, json=profile, verify=False)
         if response.status_code not in [200, 204]:
-            logger.error(f"❌ Failed to update user profile: {response.text}")
-            raise Exception("Failed to update user profile")
+            raise Exception(f"Failed to update user profile: {response.text}")
         logger.info("✅ User profile updated successfully.")
 
-    def add_attribute(self, name: str, display_name: str, input_type: str = "text",
+    def add_attribute(self, name: str, display_name: str, input_type="text",
                       view_permissions=None, edit_permissions=None):
-        view_permissions = view_permissions or ["user", "admin"]
-        edit_permissions = edit_permissions or ["user", "admin"]
 
+        view_permissions = view_permissions or ["admin", "user"]
+        edit_permissions = edit_permissions or ["admin", "user"]
+
+        # Load exact live profile structure
         profile = self.get_profile()
+
         attributes = profile.get("attributes", [])
 
-        # Check existence
-        if any(a["name"] == name for a in attributes):
+        # Skip if exists
+        if any(attr["name"] == name for attr in attributes):
             logger.info(f"ℹ️ Attribute '{name}' already exists.")
             return
 
-        attributes.append({
+        new_attr = {
             "name": name,
             "displayName": display_name,
-            "required": False,
+            "validations": {},   # You can add URL validation later
             "permissions": {
                 "view": view_permissions,
                 "edit": edit_permissions
             },
-            "validators": {},
+            "multivalued": False,
             "annotations": {
                 "inputType": input_type
             }
-        })
+        }
 
-        profile["attributes"] = attributes
+        attributes.append(new_attr)
+        profile["attributes"] = attributes  # PUT only replaces attributes array
+
         self.save_profile(profile)
-        logger.info(f"✅ Added user profile attribute '{name}'")
+        logger.info(f"✅ Added user profile attribute '{name}'.")
