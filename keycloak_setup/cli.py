@@ -59,11 +59,6 @@ def configure(config):
             if client_id:
                 mapper_mgr.add_group_membership_mapper(client_id)
 
-        logger.info("🎉 Keycloak setup completed successfully.")
-    except Exception as e:
-        logger.error(f"Setup failed: {e}")
-        click.echo(f"Setup failed: {e}", err=True)
-
         # Add avatar attribute
         profile_mgr = UserProfileManager(server_url, token, realm)
         profile_mgr.add_attribute(
@@ -87,6 +82,10 @@ def configure(config):
                 if client_uuid:
                     scope_mgr.assign_scope_to_client(client_uuid, avatar_scope_id)
 
+        logger.info("🎉 Keycloak setup completed successfully.")
+    except Exception as e:
+        logger.error(f"Setup failed: {e}")
+        click.echo(f"Setup failed: {e}", err=True)
 
 
 
