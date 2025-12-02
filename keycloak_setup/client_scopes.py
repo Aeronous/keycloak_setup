@@ -81,7 +81,7 @@ class ClientScopeManager:
         Add the avatar scope as OPTIONAL client scope.
         """
         # You can choose default-client-scopes if you want
-        url = f"{self.server_url}/admin/realms/{self.realm}/clients/{client_uuid}/optional-client-scopes/{scope_id}"
+        url = f"{self.server_url}/admin/realms/{self.realm}/clients/{client_uuid}/default-client-scopes/{scope_id}"
 
         resp = requests.put(url, headers=self.headers, verify=False)
 
