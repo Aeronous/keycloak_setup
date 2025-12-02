@@ -9,6 +9,8 @@ from keycloak_setup.clients import ClientManager
 from keycloak_setup.mappers import MapperManager
 from keycloak_setup.installer import Installer
 from keycloak_setup.uninstaller import Uninstaller
+from keycloak_setup.user_profile import UserProfileManager
+from keycloak_setup.client_scopes import ClientScopeManager
 
 logger = get_logger()
 
@@ -61,6 +63,31 @@ def configure(config):
     except Exception as e:
         logger.error(f"Setup failed: {e}")
         click.echo(f"Setup failed: {e}", err=True)
+
+        # Add avatar attribute
+        profile_mgr = UserProfileManager(server_url, token, realm)
+        profile_mgr.add_attribute(
+            name="avatar",
+            display_name="Avatar",
+            input_type="url"
+        )
+
+        # Avatar setup
+        profile_mgr = UserProfileManager(server_url, token, realm)
+        scope_mgr = ClientScopeManager(server_url, token, realm)
+
+        profile_mgr.add_attribute("avatar", "Avatar", input_type="url")
+        avatar_scope_id = scope_mgr.create_client_scope("avatar")
+        scope_mgr.add_avatar_mapper(avatar_scope_id)
+
+        for client in cfg.get("clients", []):
+            client_id = client.get("client_id")
+            if client_id:
+                client_uuid = mapper_mgr.get_client_uuid(client_id)
+                if client_uuid:
+                    scope_mgr.assign_scope_to_client(client_uuid, avatar_scope_id)
+
+
 
 
 @cli.command(name="add-user")
